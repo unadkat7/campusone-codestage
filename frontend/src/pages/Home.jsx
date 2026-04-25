@@ -4,6 +4,7 @@ import { problemsAPI } from "../services/api";
 import ProblemCard from "../components/ProblemCard";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
+import { useUserId } from "../hooks/useUserId";
 
 /**
  * Home — Brutalist Developer Dashboard refactored to clean Tailwind.
@@ -11,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const userId = useUserId();
 
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +66,7 @@ function Home() {
               <h2 className="text-sm font-black uppercase tracking-widest">
                 AVAILABLE_CHALLENGES
               </h2>
-              <Link to="/problems" className="text-accent text-[10px] font-black hover:underline">
+              <Link to={`/problems/${userId}`} className="text-accent text-[10px] font-black hover:underline">
                 [ VIEW_ALL_SYSTEMS ]
               </Link>
             </div>
@@ -123,7 +125,7 @@ function Home() {
 
             <button 
               className="card-brutal-accent p-5 text-left group hover:bg-accent transition-colors duration-100"
-              onClick={() => navigate("/problems")}
+              onClick={() => navigate(`/problems/${userId}`)}
             >
               <div className="font-black text-sm group-hover:text-black tracking-tighter">EXECUTE_NEURAL_DRILL</div>
               <div className="text-[10px] mt-1 text-text-muted group-hover:text-black/80 font-bold uppercase tracking-tight">

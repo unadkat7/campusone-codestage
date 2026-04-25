@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useUserId } from "../hooks/useUserId";
 
 /**
  * Navbar — Refactored for Campus One integration (no logout).
  */
 function Navbar() {
   const { user } = useAuth();
+  const userId = useUserId();
 
   return (
     <nav className="sticky top-0 z-50 bg-black border-b-2 border-border h-16 flex items-center px-6">
       <div className="flex items-center justify-between w-full">
         
         {/* ── Logo ── */}
-        <Link to="/home" className="flex items-center gap-3 no-underline group">
+        <Link to={`/home/${userId}`} className="flex items-center gap-3 no-underline group">
           <div className="bg-accent text-black p-1.5 font-black text-lg transition-transform group-hover:scale-110">
             {">_"}
           </div>
@@ -23,9 +25,9 @@ function Navbar() {
 
         {/* ── Nav Links ── */}
         <div className="flex items-center gap-8">
-          <NavLink to="/home" label="HOME" />
-          <NavLink to="/problems" label="PROBLEMS" />
-          <NavLink to="/profile" label="PROFILE" />
+          <NavLink to={`/home/${userId}`} label="HOME" />
+          <NavLink to={`/problems/${userId}`} label="PROBLEMS" />
+          <NavLink to={`/profile/${userId}`} label="PROFILE" />
         </div>
 
         {/* ── User Display ── */}
@@ -57,4 +59,3 @@ function NavLink({ to, label }) {
 }
 
 export default Navbar;
-

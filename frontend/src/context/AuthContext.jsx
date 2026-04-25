@@ -37,12 +37,16 @@ export const AuthProvider = ({ children }) => {
     //    URL patterns: /home/:userId, /problems/:userId, /problems/:userId/:id, etc.
     //    The userId is always the second path segment.
     const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    const params = new URLSearchParams(window.location.search);
     let urlUserId = null;
 
     if (pathSegments.length >= 2) {
       // For routes like /home/<userId>, /problems/<userId>, /profile/<userId>
       // The userId is the second segment
       urlUserId = pathSegments[1];
+    } else if (params.get("userId")) {
+      // Fallback to query parameter (e.g. /?userId=...)
+      urlUserId = params.get("userId");
     }
 
     if (urlUserId) {

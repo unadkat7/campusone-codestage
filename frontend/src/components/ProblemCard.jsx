@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useUserId } from "../hooks/useUserId";
 
 /**
  * DifficultyBadge — Refactored to Tailwind.
@@ -22,7 +23,9 @@ export function DifficultyBadge({ difficulty }) {
  */
 function ProblemCard({ problem, index }) {
   const navigate = useNavigate();
-  const handleClick = () => navigate(`/problems/${problem._id}`);
+  const userId = useUserId();
+  
+  const handleClick = () => navigate(`/problems/${userId}/${problem._id}`);
 
   return (
     <tr
