@@ -7,7 +7,7 @@ export const AuthContext = createContext();
 /**
  * AuthProvider — Campus One integration.
  *
- * Reads `userId` from the URL query string (?userId=xxx) on first load.
+ * Reads `userId` from the URL path (e.g. /home/:userId) on first load.
  * Persists it to localStorage so subsequent navigations within CodeStage
  * don't need the parameter again.
  * Fetches the full user object from the backend using x-user-id header.
@@ -33,9 +33,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // 1️⃣ Check URL for userId parameter
-    const params = new URLSearchParams(window.location.search);
-    const urlUserId = params.get("userId");
+    // 1️⃣ Extract userId from the URL path.
+    //    URL patterns: /home/:userId, /problems/:userId, /problems/:userId/:id, etc.
+    //    The userId is always the second path segment.
+    const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    let urlUserId = null;
+
+    if (pathSegments.length >= 2) {
+      // For routes like /home/<userId>, /problems/<userId>, /profile/<userId>
+      // The userId is the second segment
+      urlUserId = pathSegments[1];
+    }
 
     if (urlUserId) {
       // Save to localStorage and use it

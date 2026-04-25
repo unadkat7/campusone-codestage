@@ -13,16 +13,19 @@ import { useAuth } from "./context/AuthContext";
  * App — root routing component (Campus One integration).
  *
  * All routes are public — user identity is established via the
- * ?userId= URL parameter, handled by AuthContext.
+ * :userId URL path parameter, handled by AuthContext.
+ *
+ * URL pattern: /<page>/<userId>/...
+ * Example: /home/69eb29ace5b1f9408b8e60fb
  *
  * Routes:
- *   /               → redirect to /home
- *   /home           → Dashboard
- *   /problems       → Problem list
- *   /problems/:id   → Problem detail + code editor
- *   /submission/:id → Submission detail view
- *   /profile        → User profile
- *   *               → redirect to /home
+ *   /                                → redirect to /home (userId picked from localStorage)
+ *   /home/:userId                    → Dashboard
+ *   /problems/:userId                → Problem list
+ *   /problems/:userId/:id            → Problem detail + code editor
+ *   /submission/:userId/:submissionId → Submission detail view
+ *   /profile/:userId                 → User profile
+ *   *                                → redirect to /home
  */
 function App() {
   const { loading } = useAuth();
@@ -41,20 +44,38 @@ function App() {
   return (
     <BrowserRouter>
         <Routes>
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          {/* Default redirect — try to preserve userId from localStorage */}
+          <Route path="/" element={<DefaultRedirect />} />
 
-          {/* All routes — no auth guard */}
-          <Route path="/home" element={<Home />} />
-          <Route path="/problems" element={<Problems />} />
-          <Route path="/problems/:id" element={<ProblemDetails />} />
-          <Route path="/submission/:submissionId" element={<Submission />} />
-          <Route path="/profile" element={<Profile />} />
+          {/* All routes — userId is a path parameter */}
+          <Route path="/home/:userId" element={<Home />} />
+          <Route path="/problems/:userId" element={<Problems />} />
+          <Route path="/problems/:userId/:id" element={<ProblemDetails />} />
+          <Route path="/submission/:userId/:submissionId" element={<Submission />} />
+          <Route path="/profile/:userId" element={<Profile />} />
 
           {/* Catch-all */}
-          <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route path="*" element={<DefaultRedirect />} />
         </Routes>
     </BrowserRouter>
+  );
+}
+
+/**
+ * DefaultRedirect — redirects to /home/:userId using stored userId,
+ * or shows an error if no userId is available.
+ */
+function DefaultRedirect() {
+  const userId = localStorage.getItem("userId");
+  if (userId) {
+    return <Navigate to={`/home/${userId}`} replace />;
+  }
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center font-mono">
+      <div className="text-error text-xs font-black tracking-widest">
+        ERROR: NO_USER_ID_DETECTED // ACCESS_DENIED
+      </div>
+    </div>
   );
 }
 
