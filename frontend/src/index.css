@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Brutalist System Theme ── */
+  --color-bg: #000000;
+  --color-surface: #0A0A0A;
+  --color-border: #2A2A2A;
+  --color-accent: #FF5F1F;
+  --color-success: #22C55E;
+  --color-error: #FF3B3B;
+  
+  --color-text: #FFFFFF;
+  --color-text-muted: #A1A1A1;
+  --color-text-dim: #555555;
+
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  
+  --spacing-dense: 2px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-radius: 0 !important; /* Force sharp edges globally */
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: none;
+  }
+
+  /* Brutalist Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border: 1px solid #000; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+
+  ::selection { background: var(--color-accent); color: #000; }
+}
+
+@layer components {
+  /* ── Brutalist UI Blocks ── */
+  
+  .card-brutal {
+    @apply bg-black border-2 border-border p-6;
+    box-shadow: 8px 8px 0 0 var(--color-border);
+  }
+
+  .card-brutal-accent {
+    @apply bg-black border-2 border-accent p-6;
+    box-shadow: 8px 8px 0 0 var(--color-accent);
+  }
+
+  /* ─ Buttons ─ */
+  .btn-brutal {
+    @apply inline-flex items-center gap-2 bg-accent text-black font-black uppercase px-4 py-2 border border-accent cursor-pointer transition-all active:translate-x-0 active:translate-y-0 active:shadow-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--color-accent)];
+    font-size: 11px;
+  }
+
+  .btn-brutal-secondary {
+    @apply inline-flex items-center gap-2 bg-transparent text-white font-bold uppercase px-4 py-2 border border-border cursor-pointer transition-all hover:bg-border hover:shadow-[3px_3px_0_0_#000];
+    font-size: 10px;
+  }
+
+  /* ─ Forms ─ */
+  .input-brutal {
+    @apply w-full bg-black border border-border text-white px-3 py-2 font-mono outline-none focus:border-accent transition-colors;
+    font-size: 12px;
+  }
+
+  /* ─ Badges ─ */
+  .badge-brutal {
+    @apply px-2 py-0.5 text-[10px] font-black uppercase border;
+  }
+
+  /* ─ Terminal Elements ─ */
+  .terminal-header {
+    @apply flex items-center gap-2 bg-surface border-b border-border px-4 py-2 text-[10px] font-black text-text-dim uppercase tracking-widest;
+  }
+
+  /* ── Skeleton ── */
+  .skeleton-brutal {
+    @apply bg-surface border border-border relative overflow-hidden;
+  }
+  .skeleton-brutal::after {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes scan-line {
+    0% { top: 0%; opacity: 0.1; }
+    50% { opacity: 0.5; }
+    100% { top: 100%; opacity: 0.1; }
+  }
+
+  @keyframes flicker {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+  }
+
+  /* ── Technical Mesh Background ── */
+  .bg-mesh-brutal {
+    @apply relative bg-black overflow-hidden z-0;
+  }
+  
+  .bg-mesh-brutal::before {
+    content: "";
+    @apply absolute inset-0 pointer-events-none -z-10;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(255, 95, 31, 0.08) 0%, transparent 65%),
+      linear-gradient(rgba(42, 42, 42, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42, 42, 42, 0.15) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    background-attachment: fixed;
+    animation: mesh-drift 30s ease-in-out infinite alternate;
+  }
+
+  .bg-mesh-brutal::after {
+    content: "";
+    @apply absolute inset-0 pointer-events-none -z-10 opacity-[0.04];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+
+  @keyframes mesh-drift {
+    from { background-position: 0% 0%, 0 0, 0 0; }
+    to { background-position: 10% 10%, 0 0, 0 0; }
+  }
+
+  /* ── Route Transition Animations ── */
+  @keyframes glitch-text {
+    0% { transform: translate(0); text-shadow: none; }
+    20% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--color-accent), -1px 0 var(--color-error); }
+    40% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--color-accent), 1px 0 var(--color-error); }
+    60% { transform: translate(-2px, 1px); }
+    80% { transform: translate(2px, -1px); }
+    100% { transform: translate(0); }
+  }
+
+  .glitch-active {
+    animation: glitch-text 0.3s infinite;
+  }
+
+  @keyframes bar-grow {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  .loading-bar-fill {
+    animation: bar-grow 3s linear infinite;
+  }
+}

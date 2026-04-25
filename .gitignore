@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# env files
+.env
+
+# logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# build output
+frontend/dist/
+
+# uploads (user avatars)
+backend/uploads/
+
+# dump files
+dump/
+dump.zip
