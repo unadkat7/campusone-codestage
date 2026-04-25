@@ -5,7 +5,7 @@ import { useToast } from "../context/ToastContext";
 import Navbar from "../components/Navbar";
 import RouteLoader from "../components/RouteLoader";
 
-const BACKEND_URL = "http://localhost:5000"; // For static file serving
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; // For static file serving
 
 /**
  * Profile — Brutalist user profile with heatmap, stats, badges, and activity log.
