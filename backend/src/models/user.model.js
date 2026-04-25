@@ -8,12 +8,12 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      // Removed required/unique for Campus One integration compatibility
+      // as we might only have a userId initially.
     },
     password: {
       type: String,
-      required: true,
+      // Removed required for Campus One integration.
     },
     role: {
       type: String,
